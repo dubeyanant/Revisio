@@ -1,17 +1,45 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import React from "react";
+import ReactDOM from "react-dom/client";
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
-);
+const fetchData = async () => {
+  try {
+    const response = await fetch("http://localhost:3001/url");
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+    // Check if the response status code indicates success (e.g., 200 OK)
+    if (!response.ok) {
+      throw new Error("Failed to fetch data");
+    }
+
+    // Parse the response body as JSON
+    const data = await response.json();
+
+    // Use the data as needed
+    console.log("Data from the API:", data);
+  } catch (error) {
+    console.error("Error fetching bata:", error);
+  }
+};
+
+// Call the fetchData function to make the GET request
+fetchData();
+
+const youtubeUrl = "https://www.youtube.com/watch?v=XmGO4O2vpJw";
+const videoId = youtubeUrl.match(/[?&]v=([^&]+)/)[1];
+const youtubeVideoUrl = `https://www.youtube.com/embed/${videoId}`;
+
+function ContentList() {
+  return (
+    <iframe
+      width="560"
+      height="315"
+      src={youtubeVideoUrl}
+      title="YouTube Video"
+      frameBorder="0"
+      allowFullScreen
+    />
+  );
+}
+
+const root = ReactDOM.createRoot(document.getElementById("root"));
+
+root.render(<ContentList />);
