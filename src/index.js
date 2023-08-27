@@ -1,13 +1,13 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import YoutubeEmbed from "./youtube";
-import TweetEmbed from "./twitter";
+import Youtube from "./Youtube";
+import Twitter from "./Twitter";
 
 function ContentList() {
   return (
     <>
-      <YoutubeEmbed />
-      <TweetEmbed />
+      <Youtube />
+      <Twitter />
     </>
   );
 }

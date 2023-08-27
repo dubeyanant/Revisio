@@ -1,25 +1,26 @@
-import React, { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
+import supabase from "./config/supabaseClient";
 
-function YoutubeEmbed() {
-  const [data, setData] = useState({});
+const Youtube = () => {
+  const [fetchError, setFetchError] = useState(null);
+  const [links, setLinks] = useState(null);
+
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const rawResponse = await fetch("http://localhost:3000/url");
+    const fetchLinks = async () => {
+      const { data, error } = await supabase.from("links").select("url");
+      if (error) {
+        setFetchError("Could not fetch any urls");
+        setLinks(null);
+        console.log(error);
+      }
 
-        // Check if the rawResponse status code indicates success (e.g., 200 OK)
-        if (!rawResponse.ok) {
-          throw new Error("Failed to fetch data");
-        }
+      if (data) {
+        setFetchError(null);
 
-        // Parse the rawResponse body as JSON
-        const response = await rawResponse.json();
-
-        const videoEmbedArray = response.map((video) => {
+        const videoEmbedArray = data.map((video) => {
           const url = video.url;
-          const parsedUrl = new URL(url);
+          const parsedUrl = new URL(video.url);
 
-          // Check if the hostname is "www.youtube.com"
           if (parsedUrl.hostname === "www.youtube.com") {
             const videoId = url.match(/[?&]v=([^&]+)/)[1];
             return `https://www.youtube.com/embed/${videoId}`;
@@ -28,40 +29,35 @@ function YoutubeEmbed() {
           return null;
         });
 
-        // Filter out null values to remove empty URLs
-        const VideoEmbedArray = videoEmbedArray.filter((url) => url !== null);
-        setData(VideoEmbedArray);
-
-        // Use the response as needed
-        console.log("Response from the API:", response);
-      } catch (error) {
-        console.error("Error fetching bata:", error);
+        const VideoEmbedArray = videoEmbedArray.filter((link) => link !== null);
+        console.log(VideoEmbedArray);
+        setLinks(VideoEmbedArray);
       }
     };
 
-    // Call the fetchData function to make the GET request
-    fetchData();
+    fetchLinks();
   }, []);
 
-  if (data.length > 0) {
-    return (
-      <>
-        {data.map((youtubeVideoUrl) => (
-          <iframe
-            width="560"
-            height="315"
-            key={youtubeVideoUrl}
-            src={youtubeVideoUrl}
-            title="YouTube Video"
-            frameBorder="0"
-            allowFullScreen
-          />
-        ))}
-      </>
-    );
-  } else {
-    return <div>Loading...</div>;
-  }
-}
+  return (
+    <div className="Youtube">
+      {fetchError && <p>{fetchError}</p>}
+      {links && (
+        <>
+          {links.map((link) => (
+            <iframe
+              width="560"
+              height="315"
+              key={link}
+              src={link}
+              title="YouTube Video"
+              frameBorder="0"
+              allowFullScreen
+            />
+          ))}
+        </>
+      )}
+    </div>
+  );
+};
 
-export default YoutubeEmbed;
+export default Youtube;
