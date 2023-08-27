@@ -27,8 +27,9 @@ function useLinks(hostname) {
               if (hostname === "www.youtube.com") {
                 const videoId = url.match(/[?&]v=([^&]+)/)[1];
                 return `https://www.youtube.com/embed/${videoId}`;
-              } else {
-                return url;
+              } else if (hostname === "twitter.com") {
+                const parts = url.split("/");
+                return parts[parts.length - 1];
               }
             }
             return null;

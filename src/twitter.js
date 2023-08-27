@@ -1,4 +1,5 @@
 import React from "react";
+import { TwitterTweetEmbed } from "react-twitter-embed";
 import useLinks from "./useLinks";
 
 const Twitter = () => {
@@ -10,9 +11,9 @@ const Twitter = () => {
       {links && (
         <>
           {links.map((link) => (
-            <blockquote className="twitter-tweet" key={link}>
-              <a href={link}>{link} </a>
-            </blockquote>
+            <div key={link}>
+              <TwitterTweetEmbed tweetId={link} />
+            </div>
           ))}
         </>
       )}
