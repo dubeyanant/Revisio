@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import Youtube from "./Youtube";
-import Twitter from "./Twitter";
+import Youtube from "./youtube";
+import Twitter from "./twitter";
 
 function ContentList() {
   return (

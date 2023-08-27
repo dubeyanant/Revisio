@@ -1,42 +1,8 @@
-import { useState, useEffect } from "react";
-import supabase from "./config/supabaseClient";
+import React from "react";
+import useLinks from "./useLinks";
 
 const Youtube = () => {
-  const [fetchError, setFetchError] = useState(null);
-  const [links, setLinks] = useState(null);
-
-  useEffect(() => {
-    const fetchLinks = async () => {
-      const { data, error } = await supabase.from("links").select("url");
-      if (error) {
-        setFetchError("Could not fetch any urls");
-        setLinks(null);
-        console.log(error);
-      }
-
-      if (data) {
-        setFetchError(null);
-
-        const videoEmbedArray = data.map((video) => {
-          const url = video.url;
-          const parsedUrl = new URL(video.url);
-
-          if (parsedUrl.hostname === "www.youtube.com") {
-            const videoId = url.match(/[?&]v=([^&]+)/)[1];
-            return `https://www.youtube.com/embed/${videoId}`;
-          }
-
-          return null;
-        });
-
-        const VideoEmbedArray = videoEmbedArray.filter((link) => link !== null);
-        console.log(VideoEmbedArray);
-        setLinks(VideoEmbedArray);
-      }
-    };
-
-    fetchLinks();
-  }, []);
+  const { fetchError, links } = useLinks("www.youtube.com");
 
   return (
     <div className="Youtube">
