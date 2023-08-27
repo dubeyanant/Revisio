@@ -1,8 +1,7 @@
-// useLinks.js
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import supabase from "./config/supabaseClient";
 
-function useLinks(hostname) {
+function MediaEmbed({ hostname, children }) {
   const [fetchError, setFetchError] = useState(null);
   const [links, setLinks] = useState(null);
 
@@ -23,15 +22,7 @@ function useLinks(hostname) {
             const url = video.url;
             const parsedUrl = new URL(video.url);
 
-            if (parsedUrl.hostname === hostname) {
-              if (hostname === "www.youtube.com") {
-                const videoId = url.match(/[?&]v=([^&]+)/)[1];
-                return `https://www.youtube.com/embed/${videoId}`;
-              } else if (hostname === "twitter.com") {
-                const parts = url.split("/");
-                return parts[parts.length - 1];
-              }
-            }
+            if (parsedUrl.hostname === hostname) return url;
             return null;
           })
           .filter((link) => link !== null);
@@ -44,7 +35,18 @@ function useLinks(hostname) {
     fetchLinks();
   }, [hostname]);
 
-  return { fetchError, links };
+  return (
+    <div className={hostname}>
+      {fetchError && <p>{fetchError}</p>}
+      {links && (
+        <>
+          {links.map((link) => (
+            <div key={link}>{children(link)}</div>
+          ))}
+        </>
+      )}
+    </div>
+  );
 }
 
-export default useLinks;
+export default MediaEmbed;

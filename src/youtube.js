@@ -1,28 +1,12 @@
 import React from "react";
-import useLinks from "./useLinks";
+import MediaEmbed from "./MediaEmbed";
+import { YouTubeEmbed } from "react-social-media-embed";
 
 const Youtube = () => {
-  const { fetchError, links } = useLinks("www.youtube.com");
-
   return (
-    <div className="Youtube">
-      {fetchError && <p>{fetchError}</p>}
-      {links && (
-        <>
-          {links.map((link) => (
-            <iframe
-              width="560"
-              height="315"
-              key={link}
-              src={link}
-              title="YouTube Video"
-              frameBorder="0"
-              allowFullScreen
-            />
-          ))}
-        </>
-      )}
-    </div>
+    <MediaEmbed hostname="www.youtube.com">
+      {(link) => <YouTubeEmbed url={link} width={500} height={338} />}
+    </MediaEmbed>
   );
 };
 
