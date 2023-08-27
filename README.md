@@ -1,3 +1,7 @@
+# Resources
+
+This project uses [React Social Media Embed](https://www.npmjs.com/package/react-social-media-embed) embed library
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
