@@ -14,19 +14,12 @@ function Success() {
   const [user, setUser] = useState({});
   const navigate = useNavigate();
 
-  function setUserIDCookie(userID) {
-    document.cookie = `userID=${userID}; expires=${new Date(
-      Date.now() + 86400000
-    ).toUTCString()}; path=/`;
-  }
-
   useEffect(() => {
     async function getUserData() {
       await supabase.auth.getUser().then((value) => {
         // value.data.user
         if (value.data?.user) {
           console.log(value.data.user);
-          setUserIDCookie(value.data.user.id);
           setUser(value.data.user);
         }
       });
