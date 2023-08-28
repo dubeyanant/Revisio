@@ -1,27 +1,20 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import Youtube from "./platforms/youtube";
-import Twitter from "./platforms/twitter";
-import Instagram from "./platforms/instagram";
-import Facebook from "./platforms/facebook";
-import Linkedin from "./platforms/linkedin";
-import Pinterest from "./platforms/pinterest";
-import TikTok from "./platforms/tiktok";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Success from "./success";
+import Login from "./login";
 
-function ContentList() {
+function Index() {
   return (
-    <>
-      <TikTok />
-      <Pinterest />
-      <Linkedin />
-      <Facebook />
-      <Instagram />
-      <Youtube />
-      <Twitter />
-    </>
+    <Router>
+      <Routes>
+        <Route path="/" element={<Login />} />
+        <Route path="/success" element={<Success />} />
+      </Routes>
+    </Router>
   );
 }
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
-root.render(<ContentList />);
+root.render(<Index />);
