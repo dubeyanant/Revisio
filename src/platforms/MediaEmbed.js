@@ -8,10 +8,12 @@ function MediaEmbed({ hostname, children }) {
   useEffect(() => {
     const fetchLinks = async () => {
       const { data, error } = await supabase.from("links").select("url");
+
       if (error) {
-        setFetchError("Could not fetch any urls");
+        setFetchError("Could not fetch any URLs");
         setLinks(null);
-        console.log(error);
+        console.error(error);
+        return;
       }
 
       if (data) {
@@ -19,11 +21,10 @@ function MediaEmbed({ hostname, children }) {
 
         const filteredLinks = data
           .map((video) => {
-            const url = video.url;
-            const parsedUrl = new URL(video.url);
+            const { url } = video;
+            const parsedUrl = new URL(url);
 
-            if (parsedUrl.hostname === hostname) return url;
-            return null;
+            return parsedUrl.hostname === hostname ? url : null;
           })
           .filter((link) => link !== null);
 

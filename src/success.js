@@ -1,7 +1,6 @@
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import supabase from "./config/supabaseClient";
-import React, { useEffect, useState } from "react";
-
 import Youtube from "./platforms/youtube";
 import Twitter from "./platforms/twitter";
 import Instagram from "./platforms/instagram";
@@ -15,28 +14,27 @@ function Success() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    async function getUserData() {
-      await supabase.auth.getUser().then((value) => {
-        // value.data.user
-        if (value.data?.user) {
-          console.log(value.data.user);
-          setUser(value.data.user);
-        }
-      });
-    }
+    const getUserData = async () => {
+      const { data, error } = await supabase.auth.getUser();
+      if (data?.user) {
+        console.log(data.user);
+        setUser(data.user);
+      }
+    };
+
     getUserData();
   }, []);
 
-  async function signOutUser() {
-    const { error } = await supabase.auth.signOut();
+  const signOutUser = async () => {
+    await supabase.auth.signOut();
     navigate("/");
-  }
+  };
 
   return (
     <div>
       {Object.keys(user).length !== 0 ? (
         <>
-          <button onClick={() => signOutUser()}>sign out</button>
+          <button onClick={signOutUser}>Sign Out</button>
           <TikTok />
           <Pinterest />
           <Linkedin />
@@ -48,13 +46,7 @@ function Success() {
       ) : (
         <>
           <h1>User not logged in</h1>
-          <button
-            onClick={() => {
-              navigate("/");
-            }}
-          >
-            Go back
-          </button>
+          <button onClick={() => navigate("/")}>Go back</button>
         </>
       )}
     </div>
